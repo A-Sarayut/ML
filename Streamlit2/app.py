@@ -1,3 +1,5 @@
+from sklearn.metrics import precision_score, recall_score
+from sklearn.metrics import plot_confusion_matrix, plot_roc_curve, plot_precision_recall_curve
 from sklearn.metrics import ConfusionMatrixDisplay
 from sklearn.model_selection import train_test_split
 from sklearn import svm, datasets
@@ -12,15 +14,16 @@ import sklearn
 import seaborn as sns
 import matplotlib.pyplot as plt
 import warnings
-
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 warnings.filterwarnings('ignore')
 
 
 model_dtree = pickle.load(open('treemodel.sav', 'rb'))
-#model_knn = pickle.load(open('knn_model.pkl', 'rb'))
+model_knn = pickle.load(open('knn_model.sav', 'rb'))
 model_rfr = pickle.load(open('rfr_model.sav', 'rb'))
 st.sidebar.header('prpare data')
-st.title('Stroke Prediction')
+st.title('Stroke Classification Web App')
+st.write('>  Develope By : Sarayut Aree , Aphisit Thupsaeng')
 
 
 def prepare_info():
@@ -64,29 +67,42 @@ def label_encoding(df):
     df['smoking_status'] = le.fit_transform(df['smoking_status'])
     return df
 
+#userData = prepare_info()
+##data = data.append(userData, ignore_index=True)
+# st.write('### Input Data', userData)
 
 
 data = pd.read_csv("./healthcare-dataset-stroke-data.csv")
 data.bmi.replace(to_replace=np.nan, value=data.bmi.mean(), inplace=True)
-userData = prepare_info()
-data = data.append(userData, ignore_index=True)
-# Select some rows using st.multiselect. This will break down when you have >1000 rows.
-st.write('### Full Dataset', data)
 
-st.write('### User Dataset', userData)
-selected_indices = st.multiselect('Select rows:', data.index)
-selected_rows = data.loc[selected_indices].iloc[:, 1:-1]
+st.sidebar.write('### Full Dataset', data)
+st.sidebar.subheader("Choose Classifier")
+model_selected = st.sidebar.selectbox(
+    "Classifier", ("K-Nearest Neighbors (KNN)", "Random Forest (RF)", "Decision Tree"))
+if model_selected == "Random Forest (RF)":
+    model = model_rfr
+elif model_selected == "Decision Tree":
+    model = model_dtree
+elif model_selected == "K-Nearest Neighbors (KNN)":
+    model = model_knn
+selected_indices = st.sidebar.multiselect('Select rows:', data.index)
+
+selection_row = data.loc[selected_indices]
+input = data.loc[selected_indices].iloc[:, 1:-1]
 target = data.loc[selected_indices].iloc[:, -1]
-st.write('### Selected Row X : ', len(selected_indices), selected_rows)
-st.write('### Selected Row Y : ', len(selected_indices), target)
+st.write('### Selecting Row : ', len(selected_indices), selection_row,)
 
+# MODEL SECTION
+if selected_indices:
+    encode_df = label_encoding(input)
+    prediction = model.predict(encode_df)
 
-model_selected = st.radio("Select Model ", ("KNN", "RFR","DTREE"))
-if model_selected == "RFR":
-    model =  model_rfr
-elif model_selected == "DTREE":
-    model =  model_dtree
+    st.subheader("Model Evaluation")
+    st.write("Accuracy : ", accuracy_score(target, prediction).round(2))
+    st.write("Precision : ", precision_score(target, prediction).round(2))
+    st.write("Recall : ", recall_score(target, prediction).round(2))
 
-encode_df = label_encoding(selected_rows)
-prediction = model.predict(encode_df)
-st.write('### predict : ', len(selected_indices), prediction)
+    st.write('### prediction : ', len(selected_indices), prediction)
+    st.subheader("Confusion Matrix")
+    plot_confusion_matrix(model, input, target, display_labels=["yes", "no"])
+    st.pyplot()
