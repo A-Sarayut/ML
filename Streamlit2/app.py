@@ -13,9 +13,9 @@ from sklearn.metrics import accuracy_score, classification_report, confusion_mat
 warnings.filterwarnings('ignore')
 
 
-model_dtree = pickle.load(open('treemodel.sav', 'rb'))
-model_knn = pickle.load(open('knn_model.sav', 'rb'))
-model_rfr = pickle.load(open('rfr_model.sav', 'rb'))
+model_dtree = pickle.load(open('./treemodel.sav', 'rb'))
+model_knn = pickle.load(open('./knn_model.sav', 'rb'))
+model_rfr = pickle.load(open('./rfr_model.sav', 'rb'))
 st.sidebar.header('prpare data')
 st.title('Stroke Classification Web App')
 st.write('>  Develope By : Sarayut Aree , Aphisit Thupsaeng')
