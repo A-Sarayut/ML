@@ -1,0 +1,4 @@
+pandas-datareader==0.10.0
+scikit-learn==1.0.2
+streamlit==1.8.1
+numpy==1.19.2

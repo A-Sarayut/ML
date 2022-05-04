@@ -4,15 +4,10 @@ from sklearn.metrics import ConfusionMatrixDisplay
 from sklearn.model_selection import train_test_split
 from sklearn import svm, datasets
 from sklearn.preprocessing import LabelEncoder
-from sklearn.preprocessing import OneHotEncoder
-from sklearn.compose import ColumnTransformer
 import streamlit as st
 import pandas as pd
 import numpy as np
 import pickle
-import sklearn
-import seaborn as sns
-import matplotlib.pyplot as plt
 import warnings
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 warnings.filterwarnings('ignore')
