@@ -1,6 +1,6 @@
 pandas-datareader==0.10.0
 scikit-learn==1.0.2
-streamlit==1.8.1
+streamlit==1.8.0
 anyio==3.5.0
 asgiref==3.5.0
 autopep8==1.6.0
