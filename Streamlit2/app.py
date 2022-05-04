@@ -1,23 +1,16 @@
-from sklearn.metrics import ConfusionMatrixDisplay
-from sklearn.model_selection import train_test_split
-from sklearn import svm, datasets
+
 from sklearn.preprocessing import LabelEncoder
-from sklearn.preprocessing import OneHotEncoder
-from sklearn.compose import ColumnTransformer
 import streamlit as st
 import pandas as pd
 import numpy as np
 import pickle
-import sklearn
-import seaborn as sns
-import matplotlib.pyplot as plt
 import warnings
 
 warnings.filterwarnings('ignore')
 
 
 model_dtree = pickle.load(open('treemodel.sav', 'rb'))
-#model_knn = pickle.load(open('knn_model.pkl', 'rb'))
+#model_knn = pickle.load(open('knn_model.sav', 'rb'))
 model_rfr = pickle.load(open('rfr_model.sav', 'rb'))
 st.sidebar.header('prpare data')
 st.title('Stroke Prediction')
